@@ -1,10 +1,10 @@
 class Area{
   // data
-  float x = 20;
+  float x = 160;
   float y;
   int a;
   
-  //konstruktør
+  // konstruktør
   Area (float _y, int _a){
     y = _y;
     a = _a;
