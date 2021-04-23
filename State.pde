@@ -13,7 +13,7 @@ class State{
   
   void display(){
     textSize(15);
-    text("hej" , x, y);
+    text("txt" , x, y);
     
     
   }

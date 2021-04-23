@@ -1,6 +1,10 @@
 Area[] area = new Area [52]; // der laves 1 array med 52 værdier
 State[] state = new State [52]; // der laves 1 array med 52 værdier
 Table table;
+
+int counter;
+int doneAt = 100;
+
 void setup(){
   size(1920,1080);
   rectMode(CENTER);
@@ -8,6 +12,7 @@ void setup(){
   table=loadTable("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-areas.csv","header");
   //getData();
   thread("getData");
+  thread("loading");
   
 }
 
@@ -44,5 +49,11 @@ void g(){
   for(int i =0; i < 52; i++){
     state [i] = new State (10, yLevel, "Alabama");
     yLevel += 20;
+  }
+}
+void loading(){
+  while(counter < doneAt){
+    counter++;
+    delay(100);
   }
 }
