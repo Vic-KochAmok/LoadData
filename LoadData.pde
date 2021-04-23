@@ -5,21 +5,35 @@ Button b1 = new Button(1720, 100, 180, 200, "Sort by size", (255));
 
 Table table;
 
-int counter;
-int doneAt = 1000;
+int counterTime;
+int loadingTime = 100;
 
 void setup(){
   fullScreen();
+  thread("loading");
   //rectMode(CENTER);
   textAlign(LEFT, CENTER);
   table=loadTable("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-areas.csv","header");
   //getData();
   thread("getData");
   thread("loading");
-  
+}
+
+void loading(){
+  while(counterTime < loadingTime){
+    counterTime++;
+    delay(loadingTime);
+  }
 }
 
 void draw(){
+  if (counterTime < loadingTime){
+  background(0);
+  fill(255);
+  textSize(200);
+  text("Loading " + counterTime + "%", 400 , 400);
+  rect(415,550,counterTime*8,50);
+  } else {
   clear();
   b1.display();
   getData();
@@ -29,6 +43,7 @@ void draw(){
   for(Area b: area){
     b.display();
   }
+ }
 }  
 
 
@@ -44,13 +59,6 @@ void getData(){
     area[numb] = new Area (yLevel, i);
     yLevel += 20;
     numb++;
-  }
-}
-
-void loading(){
-  while(counter < doneAt){
-    counter++;
-    delay(1000);
   }
 }
 
