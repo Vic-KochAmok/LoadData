@@ -1,6 +1,6 @@
 class Area{
   // data
-  float x = 160;
+  float x = 240;
   float y;
   int areaLength;
   
@@ -12,7 +12,7 @@ class Area{
   
   void display(){
     
-    text(areaLength + " sq m", (areaLength)/500+170,y+5);
+    text(areaLength + " sq m", (areaLength)/500+x+10,y+5);
     if(areaLength>100){
       rect(x, y, areaLength/500, 15);
     }else{

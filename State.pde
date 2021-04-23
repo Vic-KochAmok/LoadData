@@ -1,7 +1,7 @@
 class State{
   // data
   String txt;
-  float x = 5;
+  float x = 50;
   float y;
   
   // konstruktør
