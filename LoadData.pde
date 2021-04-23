@@ -1,13 +1,14 @@
+ 
 Area[] area = new Area [52]; // der laves 1 array med 52 værdier
 State[] state = new State [52]; // der laves 1 array med 52 værdier
 Table table;
 
 int counter;
-int doneAt = 100;
+int doneAt = 1000;
 
 void setup(){
   size(1920,1080);
-  rectMode(CENTER);
+  //rectMode(CENTER);
   textAlign(LEFT, CENTER);
   table=loadTable("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-areas.csv","header");
   //getData();
@@ -17,8 +18,10 @@ void setup(){
 }
 
 void draw(){
-  f();
-  g();
+  clear();
+  makeAreas();
+  makeStates();
+  getData();
   for(State b: state){
   b.display();
   }
@@ -29,14 +32,19 @@ void draw(){
 
 
 void getData(){
+  int yLevel = 10;
+  int numb = 0;
   for(TableRow r: table.rows()){
-    String s = r.getString("state");
+    //String s = r.getString("state");
     int i = r.getInt("area (sq. mi)");
-    
-    println("state: " + s + " area: " + i);
+    //println("state: " + s + " area: " + i);
+
+    area[numb] = new Area (yLevel, i);
+    yLevel += 20;
+    numb++;
   }
 }
-void f(){
+void makeAreas(){
   int yLevel = 10;
   for(int i =0; i < 52; i++){
     area [i] = new Area (yLevel, 80);
@@ -44,7 +52,7 @@ void f(){
   }
 }
 
-void g(){
+void makeStates(){
   int yLevel = 10;
   for(int i =0; i < 52; i++){
     state [i] = new State (10, yLevel, "Alabama");
@@ -54,6 +62,6 @@ void g(){
 void loading(){
   while(counter < doneAt){
     counter++;
-    delay(100);
+    delay(1000);
   }
 }

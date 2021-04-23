@@ -2,15 +2,22 @@ class Area{
   // data
   float x = 160;
   float y;
-  int a;
+  int areaLength;
   
   // konstruktør
-  Area (float _y, int _a){
+  Area (float _y, int _areaLength){
     y = _y;
-    a = _a;
+    areaLength = _areaLength;
   }
   
   void display(){
-    rect (x, y, a, 15);
+    
+    text(areaLength + " sq m", (areaLength)/500+170,y+5);
+    if(areaLength>100){
+      rect(x, y, areaLength/500, 15);
+    }else{
+      rect(x, y, 2, 15);
+    }
+    
   }
 }
