@@ -1,66 +1,101 @@
-Area[] area = new Area [52]; // der laves 1 array med 52 værdier
-State[] state = new State [52]; // der laves 1 array med 52 værdier
-Button b1 = new Button(1720, 100, 180, 200, "Sort by size", (255));
+Area[] area = new Area [52]; 
+State[] state = new State [52]; 
+Button sortBtn = new Button(1720, 400, 170, 100, "Sort by size", "Sort alphabetically", 255, 17);
+Button convertBtn = new Button(1720, 525, 170, 100, "Show in sq. km", "Show in sq. mi", 255, 17);
+Loading loading = new Loading();
 
 Table table;
+Table sortedTable;
+boolean pointer = false;
 
-int counterTime;
-int loadingTime = 100;
-
-void setup(){
+void setup() {
   fullScreen();
-  thread("loading");
-  //rectMode(CENTER);
   textAlign(LEFT, CENTER);
-  table=loadTable("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-areas.csv","header");
-  //getData();
-  thread("getData");
-  thread("loading");
+
+  //Set table to table from cvs file
+  table=loadTable("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-areas.csv", "header");
+  sortedTable=loadTable("https://raw.githubusercontent.com/jakevdp/data-USstates/master/state-areas.csv", "header");
+  sortedTable.setColumnType(1, Table.INT);
 }
 
-void loading(){
-  while(counterTime < loadingTime){
-    counterTime++;
-    delay(loadingTime);
-  }
-}
 
-void draw(){
-  if (counterTime < loadingTime){
-  background(0);
-  fill(255);
-  textSize(200);
-  text("Loading " + counterTime + "%", 400 , 400);
-  rect(415,550,counterTime*8,50);
-  } else {
+
+void draw() {
   clear();
-  b1.display();
-  getData();
-  for(State b: state){
-    b.display();
+  //Fake loading 
+  if (loading.isLoading == true) {
+    loading.display();
+    loading.load();
+  } else { //After loading
+
+    //Sorting button
+    sortBtn.display();
+    sortBtn.pointer();
+
+    //Converting button
+    convertBtn.display();
+    convertBtn.pointer();
+
+    //Get data from cvs file
+    getData();
+
+    //Display all state names and area squares
+    for (State c : state)c.display();
+    for (Area c : area) c.display();
   }
-  for(Area b: area){
-    b.display();
-  }
- }
+
+  //Cursor hand on button 
+  if (pointer)cursor(HAND);
+  if (!pointer)cursor(ARROW);
 }  
 
-
-void getData(){
+void getData() {
+  //Is the height between the states and sizes
   int yLevel = 10;
-  int numb = 0;
-  for(TableRow r: table.rows()){
-    String s = r.getString("state");
-    state [numb] = new State (10, yLevel, s);
-    
-    int i = r.getInt("area (sq. mi)");
 
-    area[numb] = new Area (yLevel, i);
-    yLevel += 20;
-    numb++;
+  //The reached row
+  int numb = 0;
+
+  if (!sortBtn.isActive) {
+    for (TableRow row : table.rows()) {
+      //Gets String and int from cvs
+      String stateName = row.getString("state");
+      int squareMiles = row.getInt("area (sq. mi)");
+      if (convertBtn.isActive) {
+        squareMiles = int(squareMiles /0.38610);
+        state[numb] = new State (10, yLevel, stateName);
+        area[numb] = new Area (yLevel, squareMiles, false);
+      }
+      if (!convertBtn.isActive) {
+        state[numb] = new State (10, yLevel, stateName);
+        area[numb] = new Area (yLevel, squareMiles, true);
+      }
+      yLevel += 20;
+      numb++;
+    }
+  }
+  if (sortBtn.isActive) {
+    //Sorts the "sq. mi" column by size
+    sortedTable.sortReverse("area (sq. mi)");
+    for (TableRow row : sortedTable.rows()) {
+      String stateName = row.getString("state");
+      int squareMiles = row.getInt("area (sq. mi)");
+      if (convertBtn.isActive) {
+        squareMiles = int(squareMiles /0.38610);
+        state[numb] = new State (10, yLevel, stateName);
+        area[numb] = new Area (yLevel, squareMiles, false);
+      }
+      if (!convertBtn.isActive) {
+        state[numb] = new State (10, yLevel, stateName);
+        area[numb] = new Area (yLevel, squareMiles, true);
+      }
+      yLevel += 20;
+      numb++;
+    }
   }
 }
 
-void mousePressed(){
-  b1.registerPress();
+void mousePressed() {
+  sortBtn.registerPress();
+  convertBtn.registerPress();
 }
