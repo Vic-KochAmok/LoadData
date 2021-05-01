@@ -18,8 +18,6 @@ void setup() {
   sortedTable.setColumnType(1, Table.INT);
 }
 
-
-
 void draw() {
   clear();
   //Fake loading 
@@ -38,6 +36,8 @@ void draw() {
 
     //Get data from cvs file
     getData();
+    
+    checkMouse();
 
     //Display all state names and area squares
     for (State c : state)c.display();
@@ -98,4 +98,15 @@ void getData() {
 void mousePressed() {
   sortBtn.registerPress();
   convertBtn.registerPress();
+  println("down");
+}
+
+void mouseClicked(){
+  println("up");
+}
+
+void checkMouse(){
+  if(convertBtn.checkMousePos() == false && sortBtn.checkMousePos() == false){
+    pointer=false;
+  }
 }

@@ -47,7 +47,6 @@ class Button{
   
   void pointer(){
     //Makes cursor into a pointing cursor when in front of the box
-    pointer = false;
     if(checkMousePos() == true){
       pointer = true;
     }
